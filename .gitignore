@@ -1,0 +1,53 @@
+# Go-specific files
+*.go.swp
+*.a
+*.out
+*.test
+main
+
+# Dependency directories
+vendor/
+
+# Environment configuration
+.env
+
+# Build directories
+/build/
+/bin/
+
+# IDE and editor files
+.idea/
+.vscode/
+*.idea/
+*.vscode/
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Logs
+logs/
+*.log
+
+# Temporary files
+*.tmp
+*.temp
+
+# Test coverage files
+*.coverprofile
+*.out
+
+# Other
+*.bak
+*.swp
+*.swo
+*.swn
+*.orig
+*.rej
+
+# macOS specific
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Desktop.ini
