@@ -2,24 +2,31 @@ package main
 
 import (
 	"github.com/gin-gonic/gin"
-	"net/http"
+	"github.com/joho/godotenv"
+	"ketra-back/db"
+	"ketra-back/models"
+	"ketra-back/routers"
+	"log"
+	// "os"
 )
 
 func main() {
-	r := gin.Default()
-
-	// Регистрация маршрута /ping
-	r.GET("/ping", func(c *gin.Context) {
-		c.JSON(http.StatusOK, gin.H{
-			"message": "pong",
-		})
-	})
-
-	// Логирование всех запросов (для отладки)
-	r.Use(gin.Logger())
-
-	// Запуск сервера на порту 8080
-	if err := r.Run(":8080"); err != nil {
-		panic(err)
+	// Загрузка переменных окружения из файла .env
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatalf("Error loading .env file: %v", err)
 	}
+
+	// // Инициализация базы данных
+	db.InitDB()
+
+	// Автомиграция моделей
+	db.DB.AutoMigrate(&models.Ticket{})
+
+	// Создание маршрутов
+	r := gin.Default()
+	routes.RegisterTicketRoutes(r)
+
+	// Запуск сервера
+	r.Run(":8080")
 }
