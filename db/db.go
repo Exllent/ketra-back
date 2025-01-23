@@ -5,20 +5,19 @@ import (
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"log"
-	"os"
 )
 
 var DB *gorm.DB
 
-func InitDB() {
+func InitDB(dbHost, dbUser, dbPassword, dbName, dbPort, dbSslMode string) {
 	dsn := fmt.Sprintf(
 		"host=%s user=%s password=%s dbname=%s port=%s sslmode=%s TimeZone=Etc/UTC",
-		os.Getenv("DB_HOST"),
-		os.Getenv("DB_USER"),
-		os.Getenv("DB_PASSWORD"),
-		os.Getenv("DB_NAME"),
-		os.Getenv("DB_PORT"),
-		os.Getenv("DB_SSLMODE"),
+		dbHost,
+		dbUser,
+		dbPassword,
+		dbName,
+		dbPort,
+		dbSslMode,
 	)
 
 	var err error
