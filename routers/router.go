@@ -2,12 +2,12 @@ package routes
 
 import (
 	"fmt"
+	"github.com/gin-gonic/gin"
 	"ketra-back/db"
 	"ketra-back/models"
 	"ketra-back/telegram"
 	"ketra-back/validation"
 	"net/http"
-	"github.com/gin-gonic/gin"
 )
 
 func RegisterTicketRoutes(router *gin.Engine) {
@@ -46,11 +46,12 @@ func createTicket(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
+	fmt.Println(ticket)
 	if err := validation.ValidateTicket(&ticket); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	
+
 	if err := ticket.Create(); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err})
 		return
@@ -63,10 +64,10 @@ func createTicket(c *gin.Context) {
 	telegram.WG.Add(1)
 	go telegram.SendTelegramMessage(
 		fmt.Sprintf(
-			"Заявка с ID %d успешно создана!\nФИО: %s\nПочта: %s\nНомер телефона: %s\nПожелание заказчика: %s", 
-			ticketID, 
-			ticket.FIO, 
-			ticket.Email, 
+			"Заявка с ID %d успешно создана!\nФИО: %s\nПочта: %s\nНомер телефона: %s\nПожелание заказчика: %s",
+			ticketID,
+			ticket.FIO,
+			ticket.Email,
 			ticket.PhoneNumber,
 			Wishlist,
 		),

@@ -1,6 +1,7 @@
 package models
 
 import (
+	"fmt"
 	"ketra-back/db"
 	"log"
 )
@@ -33,29 +34,33 @@ func GetTicketByID(id uint) (*Ticket, error) {
 	return &ticket, nil
 }
 
-// Метод для обновления статуса заявки
-func (ticket *Ticket) UpdateStatus(status bool) error {
-	ticket.Status = status
-	if err := db.DB.Save(ticket).Error; err != nil {
-		log.Printf("Ошибка при обновлении статуса заявки с ID %d: %v", ticket.ID, err)
-		return err
-	}
-	return nil
-}
-
-// Метод для удаления заявки по ID
 func DeleteTicketByID(id uint) error {
-	if err := db.DB.Delete(&Ticket{}, id).Error; err != nil {
-		log.Printf("Ошибка при удалении заявки с ID %d: %v", id, err)
-		return err
+	result := db.DB.Delete(&Ticket{}, id)
+	if result.Error != nil {
+		log.Printf("Ошибка при удалении заявки с ID %d: %v", id, result.Error)
+		return result.Error
 	}
+
+	if result.RowsAffected == 0 {
+		log.Printf("Заявка с ID %d не найдена", id)
+		return fmt.Errorf("заявка с ID %d не найдена", id)
+	}
+
 	return nil
 }
 
-// Метод для получения всех заявок
-func GetAllTickets() ([]Ticket, error) {
+func GetTotalTicketCount() (int64, error) {
+	var count int64
+	if err := db.DB.Model(&Ticket{}).Count(&count).Error; err != nil {
+		log.Printf("Ошибка при получении общего количества заявок: %v", err)
+		return 0, err
+	}
+	return count, nil
+}
+
+func GetTickets(limit, offset int) ([]Ticket, error) {
 	var tickets []Ticket
-	if err := db.DB.Find(&tickets).Error; err != nil {
+	if err := db.DB.Limit(limit).Offset(offset).Order("id DESC").Find(&tickets).Error; err != nil {
 		log.Printf("Ошибка при получении всех заявок: %v", err)
 		return nil, err
 	}
