@@ -149,13 +149,8 @@ func remaingCommands(update *tgbotapi.Update, handlers []RemaingCommandHandler) 
 	return false
 }
 
-// func handleStartCommand(message *tgbotapi.Message) {
-// 	msg := tgbotapi.NewMessage(message.Chat.ID, "Добро пожаловать! Используйте команды /status для получения статуса или /help для помощи.")
-// 	bot.Send(msg)
-// }
-
 func handleHelpCommand(message *tgbotapi.Message) {
-	msg := tgbotapi.NewMessage(message.Chat.ID, "Доступные команды:\n/start - Начать\n/status - Статус заявки\n/help - Справка")
+	msg := tgbotapi.NewMessage(message.Chat.ID, "Доступные команды:\n/tickets - Команда для просмотра всех заявок\n/view-ticket-{ticket_id} - Детальный просмотр заявки с пожеланием\n/delete-ticket-{ticket_id} - Удалить заявку по id")
 	Bot.Send(msg)
 }
 

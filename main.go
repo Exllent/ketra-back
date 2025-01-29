@@ -34,7 +34,6 @@ func main() {
 	}
 	db.InitDB(dbHost, dbUser, dbPassword, dbName, dbPort, dbSslMode)
 	telegram.ChatId, _ = strconv.ParseInt(chatID, 10, 64)
-	
 	telegram.InitBOT(tgToken)
 	telegram.WG.Add(1)
 	go telegram.HandleTelegramUpdates()
