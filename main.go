@@ -1,14 +1,16 @@
 package main
 
 import (
-	"github.com/joho/godotenv"
 	"ketra-back/db"
 	"ketra-back/models"
 	"ketra-back/routers"
 	"ketra-back/telegram"
-	"github.com/gin-gonic/gin"
 	"log"
 	"os"
+	"strings"
+	"strconv"
+	"github.com/gin-gonic/gin"
+	"github.com/joho/godotenv"
 )
 
 func main() {
@@ -24,17 +26,20 @@ func main() {
 	dbPort := os.Getenv("DB_PORT")
 	dbSslMode := os.Getenv("DB_SSLMODE")
 	tgToken := os.Getenv("TG_TOKEN")
-
-
+	chatID := os.Getenv("CHAT_ID")
+	adminIDS := os.Getenv("ADMIN_IDS")
+	
+	for index, adminId := range strings.Split(adminIDS, ",") {
+		telegram.AdminIDs[index], _ = strconv.Atoi(adminId)
+	}
 	db.InitDB(dbHost, dbUser, dbPassword, dbName, dbPort, dbSslMode)
-	telegram.ChatId = -4740762266
+	telegram.ChatId, _ = strconv.ParseInt(chatID, 10, 64)
+	
 	telegram.InitBOT(tgToken)
 	telegram.WG.Add(1)
 	go telegram.HandleTelegramUpdates()
-
 	db.DB.AutoMigrate(&models.Ticket{})
 	r := gin.Default()
 	routes.RegisterTicketRoutes(r)
-
 	r.Run(":8080")
 }

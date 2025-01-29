@@ -12,3 +12,5 @@ type RemaingCommandHandler struct {
 }
 
 var userStates = make(map[int64]*UserState)
+var ChatId int64
+var AdminIDs [2]int
