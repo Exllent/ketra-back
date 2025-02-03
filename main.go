@@ -28,7 +28,7 @@ func main() {
 	tgToken := os.Getenv("TG_TOKEN")
 	chatID := os.Getenv("CHAT_ID")
 	adminIDS := os.Getenv("ADMIN_IDS")
-	
+		
 	for index, adminId := range strings.Split(adminIDS, ",") {
 		telegram.AdminIDs[index], _ = strconv.Atoi(adminId)
 	}
@@ -40,5 +40,6 @@ func main() {
 	db.DB.AutoMigrate(&models.Ticket{})
 	r := gin.Default()
 	routes.RegisterTicketRoutes(r)
-	r.Run(":8080")
+	r.Use(routes.CORSMiddleware())
+	r.Run(":8001")
 }

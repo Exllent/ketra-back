@@ -17,27 +17,7 @@ func RegisterTicketRoutes(router *gin.Engine) {
 	ticketsGroup := v1.Group("/tickets")
 	{
 		ticketsGroup.POST("", createTicket)
-		ticketsGroup.GET("/:id", receiveTicket)
-		ticketsGroup.GET("", receiveTickets)
-		ticketsGroup.PUT("/:id", updateTicket)
-		ticketsGroup.DELETE("/:id", deleteTicket)
 	}
-}
-
-func receiveTicket(c *gin.Context) {
-
-}
-
-func deleteTicket(c *gin.Context) {
-
-}
-
-func updateTicket(c *gin.Context) {
-
-}
-
-func receiveTickets(c *gin.Context) {
-
 }
 
 func createTicket(c *gin.Context) {
